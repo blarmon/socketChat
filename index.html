@@ -49,7 +49,7 @@
          $('#messages').append($('<li>').text(data + " has disconnected from chat!"));
          }
      });
-     
+  
      socket.on('populate_messages', function(data) {
        $('#messages').append($('<li>').text(data.message));
      });

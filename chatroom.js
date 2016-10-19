@@ -1,6 +1,7 @@
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var nicknames = [];
 
 var messages = ['first msg']
 
@@ -22,6 +23,7 @@ io.on('connection', function(socket){
   
   socket.on('chat message', function(data){
     io.emit('chat message', {msg: data, nick: socket.nickname});
+    messages.push(socket.nickname + ": " + data);
   });
   
   socket.on('disconnect', function(){
