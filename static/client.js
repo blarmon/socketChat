@@ -22,14 +22,14 @@
         $('#messages').append($('<li>').text(data.nick + ": " + data.msg));
      });
      
-     socket.on('usernames', function(data) {
-         $('#messages').append($('<li>').text(data + " has connected to chat!"));
-     });
      
-     socket.on('userDisconnect', function(data) {
-         if (data) {
-         $('#messages').append($('<li>').text(data + " has disconnected from chat!"));
+     socket.on('usernames', function(data) {
+        var currentNames = ''
+         for (var i in data.names) {
+          currentNames += '<li>' + data.names[i];
          }
+         
+         $("#users").html(currentNames);
      });
   
      socket.on('populate_messages', function(data) {

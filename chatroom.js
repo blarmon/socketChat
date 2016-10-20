@@ -7,21 +7,22 @@ var nicknames = [];
 var messages = []
 
 app.use(express.static(__dirname + '/static'));
-
+/*
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
-});
+});*/
 
 io.on('connection', function(socket){
     
     for (var i in messages) {
       socket.emit('populate_messages', { message: messages[i] } );
-   }
+    }
     
-  socket.on('nicknameEmit', function(nicknameEmit){
-      socket.nickname = nicknameEmit;
+  socket.on('nicknameEmit', function(nickname){
+    io.emit('userConnect', socket.nickname);
+      socket.nickname = nickname;
       nicknames.push(socket.nickname);
-      io.sockets.emit('usernames', socket.nickname);
+      io.sockets.emit('usernames', {names: nicknames, nick: socket.nickname});
   });
   
   socket.on('chat message', function(data){
@@ -31,6 +32,9 @@ io.on('connection', function(socket){
   
   socket.on('disconnect', function(){
     io.emit('userDisconnect', socket.nickname);
+    if (!socket.nickname) return;
+    nicknames.splice(nicknames.indexOf(socket.nickname, 1));
+    io.sockets.emit('usernames', {names: nicknames, nick: socket.nickname});
   });
   
 });
