@@ -5,9 +5,9 @@ This is the chatroomfrom the getting started section of socket.io's website.  I'
 features added by me:
  - nickname support
  - message backlog loaded when a user connects
+ - show online users
  
  
  TODO:
- - show online users
  - validate nicknames (make sure two aren't the same)
  - display when a user is typing ('nickname is typing!', 'multiple users are typing!')

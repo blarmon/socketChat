@@ -12,6 +12,7 @@
           return false;
       });
          
+         
       $('#chatForm').submit(function(){
           socket.emit('chat message', $('#m').val());
           $('#m').val('');
@@ -36,4 +37,29 @@
        $('#messages').append($('<li>').text(data.message));
      });
      
-    });
+     
+      function mainLoop() {
+      // check if the user is typing
+      if ($('#m').val() != '') {
+         // send line to to the server
+         socket.emit('isTyping', nickname);
+      }
+      setTimeout(mainLoop, 25);
+   }
+   mainLoop();
+     
+     socket.on('isTyping', function(data) {
+      console.log(data);
+      var html = '';
+      if (data.length === 1) {
+       html = data + ' is typing!';
+      }
+      else if (data.length > 1) {
+       html = 'multiple users are typing!';
+      }
+      else {
+       html = '';
+      }
+       $('.currentlyTyping').html(html);
+     });
+});

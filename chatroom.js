@@ -4,13 +4,11 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var nicknames = [];
 
-var messages = []
+var messages = [];
+
+ var currentlyTyping = [];
 
 app.use(express.static(__dirname + '/static'));
-/*
-app.get('/', function(req, res){
-  res.sendFile(__dirname + '/index.html');
-});*/
 
 io.on('connection', function(socket){
     
@@ -35,6 +33,16 @@ io.on('connection', function(socket){
     if (!socket.nickname) return;
     nicknames.splice(nicknames.indexOf(socket.nickname, 1));
     io.sockets.emit('usernames', {names: nicknames, nick: socket.nickname});
+  });
+  
+  socket.on('isTyping', function(data) {
+    if (currentlyTyping.indexOf(data) === -1) {
+       currentlyTyping.push(data);
+       for (var i in currentlyTyping){
+       console.log(currentlyTyping[i]);
+       }
+    }
+    io.emit('isTyping', currentlyTyping);
   });
   
 });
